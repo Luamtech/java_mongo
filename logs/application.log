@@ -9429,3 +9429,8 @@ Unconditional classes:
 2025-01-15 21:35:48 [http-nio-8085-exec-6] INFO  c.p.cloud.service.BlogFormService - Retrieving all blog forms
 2025-01-15 21:35:55 [http-nio-8085-exec-8] INFO  c.p.cloud.service.BlogFormService - Creating new blog form for email: ejemplo@correo.com
 2025-01-15 21:36:01 [http-nio-8085-exec-7] INFO  c.p.cloud.service.BlogFormService - Retrieving all blog forms
+2025-01-15 22:03:42 [main] INFO  com.pakal.cloud.FormApiApplication - Starting FormApiApplication v1.0.0 using Java 17.0.10 with PID 42232 (D:\WorkspacesJava\form-api\target\blog-form-api-1.0.0.jar started by Emmanuel in D:\WorkspacesJava\form-api)
+2025-01-15 22:03:42 [main] INFO  com.pakal.cloud.FormApiApplication - The following 1 profile is active: "prod"
+2025-01-15 22:03:48 [main] INFO  com.pakal.cloud.FormApiApplication - Started FormApiApplication in 7.673 seconds (process running for 8.598)
+2025-01-15 22:04:09 [http-nio-8085-exec-2] INFO  c.p.cloud.service.BlogFormService - Creating new blog form for email: ejemplo@correo.com
+2025-01-15 22:04:19 [http-nio-8085-exec-1] INFO  c.p.cloud.service.BlogFormService - Retrieving blog forms page 0 with size 10
