@@ -5,7 +5,7 @@ server:
 spring:
   data:
     mongodb:
-      uri: ${MONGODB_URI:mongodb://localhost:27017/blogdb}
+      uri: ${MONGODB_URI:mongodb://blogForm_currentcap:fccdc7d446a48e93af0912a44b9ee439bf26d2b0@i9egt.h.filess.io:27018/blogForm_currentcap}
   application:
     name: blog-form-api
 
