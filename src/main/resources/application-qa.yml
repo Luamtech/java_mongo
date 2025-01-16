@@ -1,0 +1,16 @@
+# src/main/resources/application-qa.yml
+spring:
+  config:
+    activate:
+      on-profile: qa
+
+logging:
+  level:
+    root: DEBUG
+    com.pakal.cloud: INFO
+  file:
+    name: logs/application.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+---

@@ -1,0 +1,14 @@
+# src/main/resources/application-prod.yml
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+logging:
+  level:
+    root: ERROR
+    com.pakal.cloud: INFO
+  file:
+    name: logs/application.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
