@@ -1,6 +1,6 @@
 # src/main/resources/application.yml
 server:
-  port: 8083
+  port: 8080
 
 spring:
   data:
@@ -24,3 +24,8 @@ management:
     web:
       exposure:
         include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+
