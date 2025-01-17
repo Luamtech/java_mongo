@@ -38,7 +38,7 @@ COPY --from=builder /app/target/*.jar app.jar
 USER spring:spring
 
 # Expose port 8085
-EXPOSE 8085
+EXPOSE 8083
 
 # Add healthcheck
 HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
