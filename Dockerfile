@@ -22,6 +22,9 @@ FROM amazoncorretto:17-alpine3.19
 # Add non-root user for security
 RUN addgroup -S spring && adduser -S spring -G spring
 
+# Install curl for healthcheck
+RUN apk add --no-cache curl
+
 # Create volume for logs
 VOLUME /logs
 
@@ -33,6 +36,13 @@ COPY --from=builder /app/target/*.jar app.jar
 
 # Switch to non-root user
 USER spring:spring
+
+# Expose port 8085
+EXPOSE 8085
+
+# Add healthcheck
+HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
+  CMD curl -f http://localhost:8083/actuator/health || exit 1
 
 # Set entrypoint with configurable JVM options
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
