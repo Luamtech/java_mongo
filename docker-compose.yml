@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  blog-form-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: blog-form-api
+    container_name: blog-form-api
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - JAVA_OPTS=-Xmx512m -Xms256m
+      - MONGODB_URI=mongodb://blogForm_currentcap:fccdc7d446a48e93af0912a44b9ee439bf26d2b0@i9egt.h.filess.io:27018/blogForm_currentcap
+    volumes:
+      - ./logs:/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/actuator/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+    networks:
+      - blog-network
+
+networks:
+  blog-network:
+    driver: bridge

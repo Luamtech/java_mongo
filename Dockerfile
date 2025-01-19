@@ -44,5 +44,9 @@ EXPOSE 8083
 HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
   CMD curl -f http://localhost:8083/actuator/health || exit 1
 
+# Set Spring profile environment variable
+ENV SPRING_PROFILES_ACTIVE=prod
+ENV MONGODB_URI=mongodb://blogForm_currentcap:fccdc7d446a48e93af0912a44b9ee439bf26d2b0@i9egt.h.filess.io:27018/blogForm_currentcap
+
 # Set entrypoint with configurable JVM options
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
