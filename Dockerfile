@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM maven:3.8.3-amazoncorretto-17 AS builder
+FROM csanchez/maven:4.0-azulzulu-17 AS builder
 
 # Set working directory
 WORKDIR /app
