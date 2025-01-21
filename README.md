@@ -200,4 +200,4 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE.md](LICENSE.m
 Las contribuciones son bienvenidas. Por favor, lee [CONTRIBUTING.md](CONTRIBUTING.md) para detalles sobre nuestro código de conducta y el proceso para enviarnos pull requests.
 
 ---
-⌨️ con ❤️ por [Tu Nombre](https://github.com/tu-usuario)
+⌨️ con ❤️ por [Tu Nombre](https://github.com/global-manu-man)
