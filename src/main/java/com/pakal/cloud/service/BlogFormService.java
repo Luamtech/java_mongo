@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
+import com.pakal.cloud.errors.ResourceConflictException;
 
 
 @Slf4j
@@ -22,6 +23,13 @@ public class BlogFormService {
     
     public BlogForm create(BlogFormDTO dto) {
         log.info("Creating new blog form for email: {}", dto.getEmail());
+        
+        // Verificar si ya existe un registro con el mismo email
+        if (repository.existsByEmail(dto.getEmail())) {
+            throw new ResourceConflictException("A blog form with the given email already exists.");
+        }
+        
+        // Si no existe, crear uno nuevo
         BlogForm form = new BlogForm();
         form.setEmail(dto.getEmail());
         form.setFullName(dto.getFullName());
@@ -32,6 +40,8 @@ public class BlogFormService {
         form.setDeleted(false);
         return repository.save(form);
     }
+    
+    
     
     public Page<BlogForm> findAll(int page, int size, String sortBy, String direction) {
         log.info("Retrieving blog forms page {} with size {}", page, size);
