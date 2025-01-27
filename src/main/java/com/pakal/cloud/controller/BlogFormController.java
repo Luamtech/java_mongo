@@ -60,9 +60,9 @@ public class BlogFormController {
     }
     
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete a blog form")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+    
 }

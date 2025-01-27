@@ -27,14 +27,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+            // Configuración CSRF
             .csrf(csrf -> csrf
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
+                .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+            )
+            // Configuración de autorización
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.GET, "/api/**", "/actuator/**", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/blog-forms").permitAll()
-                .anyRequest().authenticated())
-            .httpBasic(Customizer.withDefaults());
+                // Permitir acceso público a las rutas de Swagger y Actuator
+                .requestMatchers("/actuator/health", "/actuator/**", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
+                // Proteger las demás rutas con autenticación
+                .requestMatchers(HttpMethod.GET, "/api/**").authenticated()
+                .requestMatchers(HttpMethod.POST, "/api/blog-forms").authenticated()
+                .requestMatchers(HttpMethod.PUT, "/api/**").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/api/**").authenticated()
+                .anyRequest().authenticated()
+            )
+            .httpBasic(Customizer.withDefaults()); // Autenticación básica requerida
 
         return http.build();
     }
