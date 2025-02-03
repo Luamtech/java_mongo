@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.config.Customizer;
 import org.springframework.web.cors.CorsConfiguration;
@@ -53,7 +52,7 @@ public class SecurityConfig {
                                 .authorizeHttpRequests(auth -> auth
                                                 // Permitir acceso público a las rutas de Swagger y Actuator
 
-                                                .requestMatchers("/api/csrf",
+                                                .requestMatchers(
                                                                 "/actuator/health",
                                                                 "/v3/api-docs/**",
                                                                 "/swagger-ui/**",
@@ -63,6 +62,7 @@ public class SecurityConfig {
                                                                 .permitAll()
                                                 // Proteger las demás rutas con autenticación
                                                 .requestMatchers(HttpMethod.GET, "/api/**").authenticated()
+                                                .requestMatchers("/api/csrf").authenticated()
                                                 .requestMatchers(HttpMethod.POST, "/api/blog-forms").authenticated()
                                                 .requestMatchers(HttpMethod.PUT, "/api/**").authenticated()
                                                 .requestMatchers(HttpMethod.DELETE, "/api/**").authenticated()
