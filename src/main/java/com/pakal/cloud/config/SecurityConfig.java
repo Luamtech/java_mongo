@@ -29,84 +29,90 @@ import org.springframework.beans.factory.annotation.Value;
 @EnableWebSecurity
 public class SecurityConfig {
 
+        @Value("${API_USERNAME:user}") // Leer variable de entorno
+        private String username;
 
+        @Value("${API_PASSWORD:password}") // Leer variable de entorno
+        private String password;
 
-    @Value("${API_USERNAME:user}") // Leer variable de entorno
-    private String username;
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+                http
 
-    @Value("${API_PASSWORD:password}") // Leer variable de entorno
-    private String password;
+                                // ✅ Habilitar CORS en Spring Security
+                                .cors(Customizer.withDefaults()) // NUEVO: Permitir CORS correctamente
 
+                                // Configuración CSRF
+                                .csrf(csrf -> csrf
+                                                .csrfTokenRepository(new CustomCsrfTokenRepository())
+                                                .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+                                                .requireCsrfProtectionMatcher(request -> true)
+                                                .ignoringRequestMatchers("/api/csrf", "/actuator/health",
+                                                                "/swagger-ui/**", "/v3/api-docs/**"))
+                                // Configuración de autorización
+                                .authorizeHttpRequests(auth -> auth
+                                                // Permitir acceso público a las rutas de Swagger y Actuator
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
+                                                .requestMatchers("/api/csrf",
+                                                                "/actuator/health",
+                                                                "/v3/api-docs/**",
+                                                                "/swagger-ui/**",
+                                                                "/swagger-ui.html",
+                                                                "/swagger-resources/**",
+                                                                "/webjars/**")
+                                                                .permitAll()
+                                                // Proteger las demás rutas con autenticación
+                                                .requestMatchers(HttpMethod.GET, "/api/**").authenticated()
+                                                .requestMatchers(HttpMethod.POST, "/api/blog-forms").authenticated()
+                                                .requestMatchers(HttpMethod.PUT, "/api/**").authenticated()
+                                                .requestMatchers(HttpMethod.DELETE, "/api/**").authenticated()
+                                                .anyRequest().authenticated())
+                                .httpBasic(Customizer.withDefaults()); // Autenticación básica requerida
 
-            // ✅ Habilitar CORS en Spring Security
-            .cors(Customizer.withDefaults()) // NUEVO: Permitir CORS correctamente
-            
-            // Configuración CSRF
-            .csrf(csrf -> csrf
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .csrfTokenRepository(new CustomCsrfTokenRepository())
-                .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
-                // 🔹 CAMBIO: Exige CSRF en todas las solicitudes
-                .requireCsrfProtectionMatcher(request -> true)
-                // 🔹 Excluir `/api/csrf` de la protección CSRF
-                .ignoringRequestMatchers("/api/csrf","/actuator/health", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html"))
-            // Configuración de autorización
-            .authorizeHttpRequests(auth -> auth
-                // Permitir acceso público a las rutas de Swagger y Actuator
-                .requestMatchers("/actuator/health", "/actuator/**", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
-                // Proteger las demás rutas con autenticación
-                .requestMatchers(HttpMethod.GET, "/api/**").authenticated()
-                .requestMatchers(HttpMethod.POST, "/api/blog-forms").authenticated()
-                .requestMatchers(HttpMethod.PUT, "/api/**").authenticated()
-                .requestMatchers(HttpMethod.DELETE, "/api/**").authenticated()
-                .anyRequest().authenticated()
-            )
-            .httpBasic(Customizer.withDefaults()); // Autenticación básica requerida
+                return http.build();
+        }
 
-        return http.build();
-    }
+        @Bean
+        public CorsConfigurationSource corsConfigurationSource() {
+                CorsConfiguration configuration = new CorsConfiguration();
+                configuration.setAllowedOrigins(Arrays.asList(
+                                "http://localhost:8082",
+                                "https://java-mongo.onrender.com",
+                                "http://localhost:8083"));
+                configuration.setAllowedMethods(Arrays.asList(
+                                "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+                configuration.setAllowedHeaders(Arrays.asList(
+                                "Content-Type",
+                                "Authorization",
+                                "X-XSRF-TOKEN",
+                                "Access-Control-Allow-Headers",
+                                "Access-Control-Allow-Origin",
+                                "Accept"));
+                configuration.setExposedHeaders(Arrays.asList(
+                                "X-XSRF-TOKEN",
+                                "Set-Cookie",
+                                "Access-Control-Allow-Origin"));
+                configuration.setAllowCredentials(true);
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-    
-        // 🔹 Solo permitimos dominios específicos para mayor seguridad
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8082","https://mi-dominio-front.com"));
-    
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        
-        // 🔹 Permitimos los encabezados necesarios para autenticación y CSRF
-        configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization", "X-XSRF-TOKEN"));
-    
-        // 🔹 Exponemos los encabezados CSRF y cookies para que el frontend pueda leerlos
-        configuration.setExposedHeaders(Arrays.asList("X-XSRF-TOKEN", "Set-Cookie"));
-    
-        configuration.setAllowCredentials(true); // Necesario para autenticación con cookies
-    
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
-    
+                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+                source.registerCorsConfiguration("/**", configuration);
+                return source;
+        }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
- 
-        UserDetails user = User.builder()
-            .username("user")
-            .password(passwordEncoder().encode("password"))
-            .roles("USER")
-            .build();
+        @Bean
+        public UserDetailsService userDetailsService() {
 
-        return new InMemoryUserDetailsManager(user);
-    }
+                UserDetails user = User.builder()
+                                .username("user")
+                                .password(passwordEncoder().encode("password"))
+                                .roles("USER")
+                                .build();
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+                return new InMemoryUserDetailsManager(user);
+        }
+
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 }
