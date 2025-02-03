@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 
+
+@CrossOrigin(origins = {"http://localhost:8082", "https://mi-dominio-front.com", "http://localhost:8083/swagger-ui/index.html", "http://localhost:8083/swagger-ui.html"}) // Permitir CORS en este controlador
 @RestController
 @RequestMapping("/api/blog-forms")
 @RequiredArgsConstructor

@@ -1,6 +1,8 @@
 package com.pakal.cloud.controller;
 
 import jakarta.servlet.http.HttpServletRequest;  // Para manejar las solicitudes HTTP
+
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;  // Para el mapeo de solicitudes GET
 import org.springframework.web.bind.annotation.RequestMapping;  // Para definir la ruta base del controlador
 import org.springframework.web.bind.annotation.RestController;  // Para marcar esta clase como un controlador REST
@@ -8,6 +10,7 @@ import org.springframework.security.web.csrf.CsrfToken;  // Para manejar el toke
 import java.util.HashMap;  // Para manejar los datos de la respuesta
 import java.util.Map;  // Para manejar los datos de la respuesta
 
+@CrossOrigin(origins = {"http://localhost:8082", "https://mi-dominio-front.com", "http://localhost:8083/swagger-ui/index.html", "http://localhost:8083/swagger-ui.html"})  // Permitir solicitudes desde estos orígenes
 @RestController
 @RequestMapping("/api")
 public class CsrfController {
