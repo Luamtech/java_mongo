@@ -1,6 +1,6 @@
 # src/main/resources/application.yml
 server:
-  port: ${PORT}
+  port: ${PORT:8083}
 
 spring:
   data:

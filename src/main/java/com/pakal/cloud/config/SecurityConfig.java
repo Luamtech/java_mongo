@@ -12,6 +12,9 @@ import org.springframework.security.config.Customizer;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.util.Arrays;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,14 +22,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final Dotenv dotenv = Dotenv.load(); // Cargar variables de entorno desde .env
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+
+            // ✅ Habilitar CORS en Spring Security
+            .cors(Customizer.withDefaults()) // NUEVO: Permitir CORS correctamente
+            
             // Configuración CSRF
             .csrf(csrf -> csrf
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
@@ -63,11 +74,15 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
+        String username = dotenv.get("API_USERNAME", "defaultUser"); // Cargar el usuario
+        String password = dotenv.get("API_PASSWORD", "defaultPassword"); // Cargar la contraseña
+
         UserDetails user = User.builder()
-            .username("user")
-            .password(passwordEncoder().encode("password"))
+            .username(username)
+            .password(passwordEncoder().encode(password)) // Se cifra la contraseña
             .roles("USER")
             .build();
+
         return new InMemoryUserDetailsManager(user);
     }
 
