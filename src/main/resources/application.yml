@@ -10,6 +10,12 @@ spring:
   application:
     name: blog-form-api
 
+
+  security:
+    user:
+      name: ${API_USERNAME:user}   # Definir usuario desde variable de entorno con un valor por defecto
+      password: ${API_PASSWORD:password}   # Definir contraseña desde variable de entorno con un valor por defecto    
+
 logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

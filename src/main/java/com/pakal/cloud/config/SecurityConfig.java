@@ -22,13 +22,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
+
+import org.springframework.beans.factory.annotation.Value;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final Dotenv dotenv = Dotenv.load(); // Cargar variables de entorno desde .env
+
+
+    @Value("${API_USERNAME:user}") // Leer variable de entorno
+    private String username;
+
+    @Value("${API_PASSWORD:password}") // Leer variable de entorno
+    private String password;
 
 
     @Bean
@@ -74,9 +81,7 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        String username = dotenv.get("API_USERNAME", "defaultUser"); // Cargar el usuario
-        String password = dotenv.get("API_PASSWORD", "defaultPassword"); // Cargar la contraseña
-
+ 
         UserDetails user = User.builder()
             .username(username)
             .password(passwordEncoder().encode(password)) // Se cifra la contraseña
