@@ -79,7 +79,8 @@ public class SecurityConfig {
                            "http://localhost:8082",
                                 "https://java-mongo.onrender.com",
                                 "http://localhost:8083", 
-                                "http://localhost:5173"));
+                                "http://localhost:5173",
+                                "https://astonishing-lamington-2bfbd2.netlify.app"));
                 configuration.setAllowedMethods(Arrays.asList(
                                 "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
                 configuration.setAllowedHeaders(Arrays.asList(

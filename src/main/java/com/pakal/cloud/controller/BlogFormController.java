@@ -18,7 +18,12 @@ import java.time.LocalDateTime;
 
 
 // Permitir CORS en este controlador
-@CrossOrigin(origins = {"http://localhost:8082", "https://mi-dominio-front.com", "http://localhost:8083", "http://localhost:5173"}) 
+@CrossOrigin(origins = {
+    "http://localhost:8082",
+    "https://mi-dominio-front.com",
+    "http://localhost:8083",
+    "http://localhost:5173",
+    "https://astonishing-lamington-2bfbd2.netlify.app"}) 
 @RestController
 @RequestMapping("/api/blog-forms")
 @RequiredArgsConstructor
