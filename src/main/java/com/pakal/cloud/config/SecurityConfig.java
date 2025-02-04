@@ -78,7 +78,8 @@ public class SecurityConfig {
                 configuration.setAllowedOrigins(Arrays.asList(
                            "http://localhost:8082",
                                 "https://java-mongo.onrender.com",
-                                "http://localhost:8083"));
+                                "http://localhost:8083", 
+                                "http://localhost:5173"));
                 configuration.setAllowedMethods(Arrays.asList(
                                 "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
                 configuration.setAllowedHeaders(Arrays.asList(
