@@ -1,4 +1,4 @@
-# Blog Form API 📝
+# Blog Form API 🖍
 
 ![Java](https://img.shields.io/badge/Java-17-orange)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.0-brightgreen)
@@ -22,12 +22,13 @@ API REST desarrollada con Spring Boot para la gestión de formularios de blog, c
 ## ✨ Características
 
 * 📌 CRUD completo para formularios
-* 📄 Paginación y ordenamiento
+* 📜 Paginación y ordenamiento
 * 🔍 Filtros por país, nombre y fechas
-* 🗑️ Borrado lógico
-* 📚 Documentación Swagger/OpenAPI
-* 📝 Logs configurables por ambiente
-* 🗄️ MongoDB como base de datos
+* 👑 Validación de registros únicos por email
+* 📡 Protección CSRF para solicitudes POST
+* 📝 Documentación Swagger/OpenAPI
+* 🔧 Logs configurables por ambiente
+* 👌 MongoDB como base de datos
 
 ## 🔧 Requisitos Previos
 
@@ -84,12 +85,44 @@ API REST desarrollada con Spring Boot para la gestión de formularios de blog, c
 | description | Máximo 500 caracteres |
 | country | Opcional |
 
-## 📚 Documentación de Endpoints
+## 📒 Documentación de Endpoints
 
-### Crear Formulario
+### Crear Formulario (Protección CSRF)
 ```http
 POST /api/blog-forms
 ```
+Para realizar una solicitud `POST`, primero debes obtener el token CSRF mediante el endpoint correspondiente y luego incluirlo en el encabezado de tu solicitud.
+
+#### Flujo de Solicitud:
+1. **Obtener el Token CSRF**:
+   ```http
+   GET /api/csrf
+   ```
+   Respuesta:
+   ```json
+   {
+       "token": "<TOKEN>",
+       "headerName": "X-XSRF-TOKEN",
+       "parameterName": "_csrf"
+   }
+   ```
+
+2. **Realizar la Solicitud POST**:
+   ```http
+   POST /api/blog-forms
+   Headers:
+       Accept: */*
+       Content-Type: application/json
+       X-XSRF-TOKEN: <TOKEN>
+       Authorization: Basic <CREDENCIALES EN BASE64>
+   Body:
+       {
+           "email": "ejemplo@correo.com",
+           "fullName": "Juan Pérez",
+           "description": "Descripción",
+           "country": "México"
+       }
+   ```
 
 ### Listar Formularios (Paginado)
 ```http
@@ -140,9 +173,7 @@ GET /actuator/metrics
 
 ### Crear Registro
 ```bash
-curl -X POST http://localhost:8080/api/blog-forms \
-  -H "Content-Type: application/json" \
-  -d '{
+curl -X POST http://localhost:8080/api/blog-forms   -H "Content-Type: application/json"   -H "X-XSRF-TOKEN: <TOKEN>"   -H "Authorization: Basic <CREDENCIALES EN BASE64>"   -d '{
     "email": "ejemplo@correo.com",
     "fullName": "Juan Pérez",
     "description": "Descripción",
@@ -163,18 +194,16 @@ curl "http://localhost:8080/api/blog-forms?page=0&size=10&country=México"
 | 201 | Creado |
 | 400 | Error de validación |
 | 404 | No encontrado |
+| 409 | Conflicto (Email duplicado) |
 | 500 | Error interno |
 
 Ejemplo de Error:
 ```json
 {
     "timestamp": "2025-01-15T12:00:00",
-    "status": 400,
-    "error": "Bad Request",
-    "message": "Validation failed",
-    "errors": {
-        "email": "Invalid email format"
-    }
+    "status": 409,
+    "error": "Conflict",
+    "message": "A blog form with the given email already exists."
 }
 ```
 
@@ -185,13 +214,10 @@ Ejemplo de Error:
 docker build -t blog-form-api .
 
 # Ejecutar
-docker run -p 8080:8080 \
-  -e SPRING_PROFILES_ACTIVE=prod \
-  -e MONGODB_URI=mongodb://mongo:27017/blogdb \
-  blog-form-api
+docker run -p 8080:8080   -e SPRING_PROFILES_ACTIVE=prod   -e MONGODB_URI=mongodb://mongo:27017/blogdb   blog-form-api
 ```
 
-## 📄 Licencia
+## 📜 Licencia
 
 Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE.md](LICENSE.md) para detalles
 
@@ -200,4 +226,4 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE.md](LICENSE.m
 Las contribuciones son bienvenidas. Por favor, lee [CONTRIBUTING.md](CONTRIBUTING.md) para detalles sobre nuestro código de conducta y el proceso para enviarnos pull requests.
 
 ---
-⌨️ con ❤️ por [Tu Emmanuel](https://github.com/global-manu-man)
+🚲 con ❤️ por [Emmanuel](https://github.com/global-manu-man)

@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Repository
 public interface BlogFormRepository extends MongoRepository<BlogForm, String> {
@@ -14,4 +13,6 @@ public interface BlogFormRepository extends MongoRepository<BlogForm, String> {
     Page<BlogForm> findByCountryAndIsDeletedFalse(String country, Pageable pageable);
     Page<BlogForm> findByFullNameContainingAndIsDeletedFalse(String fullName, Pageable pageable);
     Page<BlogForm> findByCreatedAtBetweenAndIsDeletedFalse(LocalDateTime start, LocalDateTime end, Pageable pageable);
+     // Nuevo método para verificar si existe un email
+     boolean existsByEmail(String email);
 }
