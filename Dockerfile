@@ -21,7 +21,7 @@ RUN mvn clean package -DskipTests -Dmaven.javadoc.skip=true
 
 
 ### Etapa 2: Generación de runtime mínimo con jlink
-FROM azul/zulu-openjdk-alpine:17 AS jlink
+FROM amazoncorretto:17-alpine3.21-jdk AS jlink
 
 WORKDIR /jre
 
