@@ -16,7 +16,7 @@ API REST desarrollada con Spring Boot para la gestión de formularios de blog, c
 - [Perfiles de Ejecución](#-perfiles-de-ejecución)
 - [Monitoreo](#-monitoreo)
 - [Ejemplos](#-ejemplos)
-- [Manejo de Errores](#-manejo-de-errores)
+- [Manejo de Errores](#-manejo-de-errores)edw
 - [Docker](#-docker)
 
 ## ✨ Características
